@@ -104,7 +104,7 @@ export const AdminDashboard: React.FC = () => {
   }
 
   const handleDownloadBundle = () => {
-    const url = `/api/programmes/${selectedProgCode}/bundle`;
+    const url = api.bundleProgrammeUrl(selectedProgCode);
     // Post to trigger download
     fetch(url, {
       method: 'POST',
@@ -139,51 +139,51 @@ export const AdminDashboard: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
-          <ShieldCheck className="w-6 h-6 text-purple-600" />
+        <h1 className="text-2xl font-black text-[#7B1113] tracking-tight flex items-center space-x-2 font-tce">
+          <ShieldCheck className="w-6 h-6 text-[#C59B27]" />
           <span>Academic Council (ACM) & System Administration</span>
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Perform institutional readiness audits, compile multi-semester curriculum bundles, and configure master data collections.
+          Perform institutional readiness audits for Thiagarajar College of Engineering, compile multi-semester curriculum bundles, and configure master data collections.
         </p>
       </div>
 
       {/* Admin Tabs */}
-      <div className="flex space-x-1 bg-white border border-slate-200 p-1.5 rounded-2xl shadow-xs text-xs font-semibold text-slate-600">
+      <div className="flex space-x-1 bg-white border border-slate-200 border-t-4 border-t-[#7B1113] p-1.5 rounded-2xl shadow-xs text-xs font-semibold text-slate-600">
         <button
           onClick={() => setActiveTab('readiness')}
           className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all ${
-            activeTab === 'readiness' ? 'bg-purple-600 text-white shadow-sm' : 'hover:bg-slate-100 hover:text-slate-900'
+            activeTab === 'readiness' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'hover:bg-slate-100 hover:text-slate-900'
           }`}
         >
-          <FileCheck className="w-4 h-4" />
+          <FileCheck className="w-4 h-4 text-[#E2BF53]" />
           <span>ACM Readiness Report</span>
         </button>
         <button
           onClick={() => setActiveTab('bundler')}
           className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all ${
-            activeTab === 'bundler' ? 'bg-purple-600 text-white shadow-sm' : 'hover:bg-slate-100 hover:text-slate-900'
+            activeTab === 'bundler' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'hover:bg-slate-100 hover:text-slate-900'
           }`}
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-4 h-4 text-[#E2BF53]" />
           <span>Programme Bundler (.docx)</span>
         </button>
         <button
           onClick={() => setActiveTab('master')}
           className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all ${
-            activeTab === 'master' ? 'bg-purple-600 text-white shadow-sm' : 'hover:bg-slate-100 hover:text-slate-900'
+            activeTab === 'master' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'hover:bg-slate-100 hover:text-slate-900'
           }`}
         >
-          <Sliders className="w-4 h-4" />
+          <Sliders className="w-4 h-4 text-[#E2BF53]" />
           <span>Master Data Collections</span>
         </button>
         <button
           onClick={() => setActiveTab('users')}
           className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all ${
-            activeTab === 'users' ? 'bg-purple-600 text-white shadow-sm' : 'hover:bg-slate-100 hover:text-slate-900'
+            activeTab === 'users' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'hover:bg-slate-100 hover:text-slate-900'
           }`}
         >
-          <Users className="w-4 h-4" />
+          <Users className="w-4 h-4 text-[#E2BF53]" />
           <span>User Management</span>
         </button>
       </div>

@@ -61,6 +61,8 @@ export async function generatePdfDocument(course: Course): Promise<Buffer> {
     margin-top: 14px;
     margin-bottom: 6px;
     text-transform: uppercase;
+      background-color: #E5E7EB;
+      padding: 4px;
   }
   .footer-note {
     position: fixed;
@@ -78,7 +80,9 @@ export async function generatePdfDocument(course: Course): Promise<Buffer> {
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;">
     <tr>
       <td rowspan="2" style="width: 16%; font-weight: bold; vertical-align: middle; background-color: #f9fafb; text-align: center;">${course.courseCode}</td>
-      <td rowspan="2" style="width: 44%; font-weight: bold; vertical-align: middle; font-size: 10.5pt; text-transform: uppercase; background-color: #f9fafb;">${titleCaps}</td>
+      <td rowspan="2" style="width: 44%; font-weight: bold; vertical-align: middle; font-size: 10.5pt; text-transform: uppercase;
+      background-color: #E5E7EB;
+      padding: 4px; background-color: #f9fafb;">${titleCaps}</td>
       <th style="width: 14%; text-align: center; background-color: #f3f4f6; font-size: 9pt;">CATEGORY</th>
       <th style="width: 6.5%; text-align: center; background-color: #f3f4f6; font-size: 9pt;">L</th>
       <th style="width: 6.5%; text-align: center; background-color: #f3f4f6; font-size: 9pt;">T</th>
@@ -100,9 +104,7 @@ export async function generatePdfDocument(course: Course): Promise<Buffer> {
   <p>${course.preamble || ''}</p>
 
   <h3>Prerequisite</h3>
-  <p>${Array.isArray(course.prerequisites) && course.prerequisites.length > 0
-    ? course.prerequisites.map(p => `${p.courseCode} : ${p.courseName}`).join('<br>')
-    : 'Nil'}</p>
+  <p>${typeof course.prerequisites === 'string' ? course.prerequisites : 'Nil'}</p>
 
   <h3>Course Outcomes</h3>
   <p>On the successful completion of the course, students will be able to:</p>
@@ -408,7 +410,7 @@ export async function generatePdfDocument(course: Course): Promise<Buffer> {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'networkidle0' as any });
     const pdfBuffer = await page.pdf({
       format: 'A4',
       margin: {

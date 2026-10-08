@@ -5,7 +5,7 @@ import {
   TableRow,
   TableCell,
   TextRun,
-  AlignmentType,
+  AlignmentType, ShadingType,
   WidthType,
   BorderStyle,
   Footer,
@@ -38,7 +38,7 @@ function createText(text: string, options: { bold?: boolean; size?: number; font
 
 function createHeading(text: string) {
   return new Paragraph({
-    spacing: { before: 200, after: 100 },
+    spacing: { before: 200, after: 100 }, shading: { type: ShadingType.CLEAR, color: "auto", fill: "E0E0E0" },
     children: [createText(text, { bold: true, size: 22 })],
   });
 }
@@ -164,16 +164,10 @@ export async function generateDocxDocument(course: Course): Promise<Buffer> {
 
   // 3. Prerequisite
   children.push(createHeading('Prerequisite'));
-  if (Array.isArray(course.prerequisites) && course.prerequisites.length > 0) {
-    course.prerequisites.forEach(p => {
-      children.push(new Paragraph({
-        children: [createText(`${p.courseCode} : ${p.courseName}`)],
-      }));
-    });
-  } else {
-    children.push(new Paragraph({ children: [createText('Nil')] }));
-  }
-
+  children.push(new Paragraph({
+    spacing: { after: 150 },
+    children: [createText(typeof course.prerequisites === 'string' ? course.prerequisites : 'Nil')],
+  }));
   // 4. Course Outcomes
   children.push(createHeading('Course Outcomes'));
   children.push(new Paragraph({
@@ -419,7 +413,7 @@ export async function generateDocxDocument(course: Course): Promise<Buffer> {
                 width: 550,
                 height: 280,
               },
-            }),
+            } as any),
           ],
         }));
       } catch (err) {
@@ -852,3 +846,4 @@ export async function generateProgrammeBundleDocx(bundleData: {
 
   return await Packer.toBuffer(bundledDoc);
 }
+

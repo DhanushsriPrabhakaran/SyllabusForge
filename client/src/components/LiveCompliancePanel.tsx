@@ -36,44 +36,48 @@ export const LiveCompliancePanel: React.FC<LiveCompliancePanelProps> = ({
   const checklistTotal = report.checklist.length;
 
   return (
-    <div className="w-80 xl:w-96 flex-shrink-0 flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden sticky top-20 max-h-[calc(100vh-6rem)]">
+    <div className="w-80 xl:w-96 flex-shrink-0 flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden sticky top-20 max-h-[calc(100vh-6rem)] border-t-4 border-t-[#0F2942]">
       {/* Panel Header */}
-      <div className="p-4 border-b border-slate-200 bg-slate-50/70">
+      <div className="p-4 border-b border-[#C59B27]/40 bg-[#0F2942] text-white">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            <ShieldCheck className={`w-5 h-5 ${report.isValid ? 'text-emerald-600' : 'text-rose-600'}`} />
-            <h3 className="font-bold text-slate-900 text-sm">Live Compliance Panel</h3>
+            <ShieldCheck className={`w-5 h-5 ${report.isValid ? 'text-[#E2BF53]' : 'text-rose-400'}`} />
+            <div>
+              <h3 className="font-bold text-white text-xs sm:text-sm font-tce">Live Compliance Panel</h3>
+              <div className="text-[10px] text-slate-300">TCE Regulation 2026 Audit</div>
+            </div>
           </div>
           <span
-            className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+            className={`px-2 py-0.5 rounded-full text-xs font-bold ${
               report.isValid
-                ? 'bg-emerald-100 text-emerald-800'
-                : 'bg-rose-100 text-rose-800'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
             }`}
           >
-            {report.isValid ? 'Valid' : `${errorCount} Issues`}
+            {report.isValid ? 'BoS Ready' : `${errorCount} Issues`}
           </span>
         </div>
 
         {/* Progress Bar / Checklist badge */}
         {checklistTotal > 0 && (
-          <div className="mt-2">
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
-              <span>ACM 17-Point Checklist</span>
-              <span className="font-semibold text-slate-800">
+          <div className="mt-2 text-slate-200">
+            <div className="flex items-center justify-between text-[11px] mb-1">
+              <span>ACM 17-Point Audit</span>
+              <span className="font-bold text-[#E2BF53]">
                 {checklistPassed}/{checklistTotal} Passed
               </span>
             </div>
-            <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+            <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
-                  checklistPassed === checklistTotal ? 'bg-emerald-500' : 'bg-amber-500'
+                  checklistPassed === checklistTotal ? 'bg-[#E2BF53]' : 'bg-amber-400'
                 }`}
                 style={{ width: `${(checklistPassed / checklistTotal) * 100}%` }}
               />
             </div>
           </div>
         )}
+
 
         {/* Tabs */}
         <div className="flex space-x-1 mt-3 bg-slate-200/60 p-1 rounded-lg text-xs font-medium text-slate-600">

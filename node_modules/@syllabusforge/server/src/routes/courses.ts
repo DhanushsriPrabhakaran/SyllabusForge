@@ -65,7 +65,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response): Promise<
 
     // Auto-calculate credits if not given
     if (courseData.L !== undefined && courseData.T !== undefined && courseData.P !== undefined) {
-      courseData.credits = computeCredits(courseData.L, courseData.T, courseData.P);
+      courseData.credits = computeCredits(courseData.L, courseData.T, courseData.P, courseData.courseType);
     }
 
     // Auto-compute course code
@@ -109,7 +109,7 @@ router.put('/:id', authenticate, async (req: AuthRequest, res: Response): Promis
 
     // Recalculate credits
     if (updateData.L !== undefined && updateData.T !== undefined && updateData.P !== undefined) {
-      updateData.credits = computeCredits(updateData.L, updateData.T, updateData.P);
+      updateData.credits = computeCredits(updateData.L, updateData.T, updateData.P, updateData.courseType);
     }
 
     // Recalculate course code if components changed
@@ -328,3 +328,4 @@ router.get('/:id/export', async (req, res): Promise<void> => {
 });
 
 export default router;
+

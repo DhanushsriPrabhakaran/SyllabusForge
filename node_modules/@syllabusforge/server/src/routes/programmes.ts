@@ -21,13 +21,13 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response): Promise<v
 router.get('/:code/readiness', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { code } = req.params;
-    const programme = await Programme.findOne({ code: code.toUpperCase() });
+    const programme = await Programme.findOne({ code: code ? (code as string).toUpperCase() : '' });
     if (!programme) {
       res.status(404).json({ error: 'Programme not found.' });
       return;
     }
 
-    const courses = await Course.find({ programmeCode: code.toUpperCase() }).sort({ semester: 1, courseCode: 1 });
+    const courses = await Course.find({ programmeCode: code ? (code as string).toUpperCase() : '' }).sort({ semester: 1, courseCode: 1 });
     const existingCodes = courses.map(c => c.courseCode);
 
     const auditResults = courses.map(course => {
@@ -67,14 +67,14 @@ router.post('/:code/bundle', authenticate, requireRole(['ADMIN']), async (req: A
     const { code } = req.params;
     const { regulationYear = 2026, minSemester = 1, maxSemester = 8, annexureNo = '01' } = req.body;
 
-    const programme = await Programme.findOne({ code: code.toUpperCase() });
+    const programme = await Programme.findOne({ code: code ? (code as string).toUpperCase() : '' });
     if (!programme) {
       res.status(404).json({ error: 'Programme not found.' });
       return;
     }
 
     const courses = await Course.find({
-      programmeCode: code.toUpperCase(),
+      programmeCode: code ? (code as string).toUpperCase() : '',
       semester: { $gte: Number(minSemester), $lte: Number(maxSemester) },
     }).sort({ semester: 1, courseCode: 1 });
 

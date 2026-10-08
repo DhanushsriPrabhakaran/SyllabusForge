@@ -10,7 +10,7 @@ export interface CourseCodeParts {
 }
 export declare function computeCourseCode(parts: CourseCodeParts): string;
 export declare function validateCourseCode(parts: CourseCodeParts, existingProgrammeCodes?: string[]): ValidationRuleResult[];
-export declare function computeCredits(L: number, T: number, P: number): number;
+export declare function computeCredits(L: number, T: number, P: number, courseType?: CourseType): number;
 export declare function validateLtpCredits(courseType: CourseType, categoryAbbr: string, L: number, T: number, P: number, credits: number): ValidationRuleResult[];
 export declare function validatePreamble(preamble: string, coStatements?: string[]): ValidationRuleResult[];
 export declare function validateCourseOutcomes(cos: CourseOutcome[], courseType: CourseType, allowTps1?: boolean): ValidationRuleResult[];

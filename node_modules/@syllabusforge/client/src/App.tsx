@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
+import { TceFooter } from './components/TceFooter';
 import { Dashboard } from './pages/Dashboard';
 import { CourseWizard } from './pages/CourseWizard';
 import { ReviewWorkspace } from './pages/ReviewWorkspace';
@@ -85,6 +86,7 @@ export const AppContent: React.FC = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+      <TceFooter />
     </div>
   );
 };

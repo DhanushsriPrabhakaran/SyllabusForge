@@ -67,10 +67,12 @@ export const CATEGORY_ABBREVIATIONS = [
 export type CategoryAbbreviation = typeof CATEGORY_ABBREVIATIONS[number];
 
 export const TPS_VERBS: Record<number, string[]> = {
+  1: ['Define', 'Identify', 'List', 'Name', 'Recall', 'Recognize', 'Record', 'Relate', 'Repeat', 'Underline'],
   2: ['Explain', 'Describe', 'Interpret', 'Classify'],
   3: ['Solve', 'Compute', 'Demonstrate', 'Use', 'Apply', 'Operate', 'Measure', 'Execute'],
   4: ['Compare', 'Differentiate', 'Examine', 'Break down', 'Analyse', 'Analyze'],
   5: ['Assess', 'Conclude', 'Critique', 'Decide', 'Evaluate', 'Justify', 'Prioritise', 'Prioritize', 'Recommend', 'Validate', 'Verify'],
+  6: ['Construct', 'Design', 'Develop', 'Formulate', 'Invent', 'Create', 'Plan', 'Produce'],
 };
 
 export interface LabObjective {

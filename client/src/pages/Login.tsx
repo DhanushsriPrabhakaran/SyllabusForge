@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FileText, Lock, Mail, ArrowRight, Shield, UserCheck, BookOpen } from 'lucide-react';
+import { FileText, Lock, Mail, ArrowRight, Shield, UserCheck, BookOpen, Award } from 'lucide-react';
+import { TceLogo } from '../components/TceLogo';
 
 export const Login: React.FC = () => {
   const { login, quickLogin } = useAuth();
@@ -40,25 +41,27 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-gradient-to-br from-[#3D0709] via-[#7B1113] to-[#091A2A] flex items-center justify-center p-4 relative overflow-hidden font-sans">
+      {/* Decorative radial glows */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C59B27]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0F2942]/40 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-2xl relative z-10 border border-slate-100">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white mx-auto mb-3 shadow-lg shadow-sky-600/30">
-            <FileText className="w-6 h-6" />
+      <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-2xl relative z-10 border-t-4 border-[#C59B27]">
+        {/* TCE Brand Header */}
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-3">
+            <TceLogo variant="full" />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">SyllabusForge</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Institutional Curriculum & Syllabus Engineering System (Regulation 2026)
+          <div className="mt-2 text-xs font-bold text-[#7B1113] uppercase tracking-wider bg-[#FAF7F2] py-1 px-3 rounded-full inline-block border border-[#C59B27]/40">
+            Regulation 2026 Curriculum Portal
+          </div>
+          <p className="text-xs text-slate-500 mt-2">
+            Outcome Based Education (OBE) & Syllabus Formulation Engine
           </p>
         </div>
 
         {error && (
-          <div className="p-3 mb-5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800">
+          <div className="p-3 mb-5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800">
             {error}
           </div>
         )}
@@ -74,8 +77,8 @@ export const Login: React.FC = () => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="faculty@institution.edu"
-                className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-sky-500"
+                placeholder="faculty@tce.edu"
+                className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-[#7B1113] focus:border-[#7B1113]"
               />
             </div>
           </div>
@@ -90,7 +93,7 @@ export const Login: React.FC = () => {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-sky-500"
+                className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-[#7B1113] focus:border-[#7B1113]"
               />
             </div>
           </div>
@@ -98,44 +101,44 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-600/20 flex items-center justify-center space-x-1.5 transition-all active:scale-95"
+            className="w-full py-2.5 rounded-lg bg-[#7B1113] hover:bg-[#560B0D] text-white font-bold text-xs shadow-md shadow-[#7B1113]/30 flex items-center justify-center space-x-1.5 transition-all active:scale-95 border border-[#C59B27]/40"
           >
-            <span>{loading ? 'Authenticating...' : 'Sign In'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{loading ? 'Authenticating with TCE...' : 'Sign In to Portal'}</span>
+            <ArrowRight className="w-4 h-4 text-[#E2BF53]" />
           </button>
         </form>
 
-        {/* Demo Quick Logins */}
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <div className="text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">
-            Demo Personas (One-Click Sign In)
+        {/* Demo Personas */}
+        <div className="mt-8 pt-5 border-t border-slate-100">
+          <div className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+            Institutional Personas (One-Click Sign In)
           </div>
           <div className="grid grid-cols-3 gap-2">
             <button
               onClick={() => handleQuick('FACULTY')}
-              className="p-2.5 rounded-xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50/50 text-center transition-all group"
+              className="p-2.5 rounded-lg border border-slate-200 hover:border-[#7B1113] hover:bg-[#FAF2F3] text-center transition-all group"
             >
-              <BookOpen className="w-4 h-4 text-sky-600 mx-auto mb-1 group-hover:scale-110 transition-transform" />
+              <BookOpen className="w-4 h-4 text-[#7B1113] mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-bold text-slate-800 block">Faculty</span>
               <span className="text-[10px] text-slate-400 block truncate">Dr. Sharmila</span>
             </button>
 
             <button
               onClick={() => handleQuick('HOD')}
-              className="p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 text-center transition-all group"
+              className="p-2.5 rounded-lg border border-slate-200 hover:border-[#0F2942] hover:bg-[#F0F4F8] text-center transition-all group"
             >
-              <UserCheck className="w-4 h-4 text-emerald-600 mx-auto mb-1 group-hover:scale-110 transition-transform" />
+              <UserCheck className="w-4 h-4 text-[#0F2942] mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-bold text-slate-800 block">HoD</span>
               <span className="text-[10px] text-slate-400 block truncate">Dr. Suresh</span>
             </button>
 
             <button
               onClick={() => handleQuick('ADMIN')}
-              className="p-2.5 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 text-center transition-all group"
+              className="p-2.5 rounded-lg border border-slate-200 hover:border-[#C59B27] hover:bg-[#FDF9EE] text-center transition-all group"
             >
-              <Shield className="w-4 h-4 text-purple-600 mx-auto mb-1 group-hover:scale-110 transition-transform" />
+              <Shield className="w-4 h-4 text-[#9C7A1D] mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-bold text-slate-800 block">Admin</span>
-              <span className="text-[10px] text-slate-400 block truncate">Dean Academics</span>
+              <span className="text-[10px] text-slate-400 block truncate">Dean (Academics)</span>
             </button>
           </div>
         </div>

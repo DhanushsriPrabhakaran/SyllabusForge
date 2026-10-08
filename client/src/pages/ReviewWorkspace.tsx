@@ -72,24 +72,24 @@ export const ReviewWorkspace: React.FC = () => {
       {/* Workspace Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
-            <CheckSquare className="w-6 h-6 text-emerald-600" />
+          <h1 className="text-2xl font-black text-[#7B1113] tracking-tight flex items-center space-x-2 font-tce">
+            <CheckSquare className="w-6 h-6 text-[#C59B27]" />
             <span>Department Syllabus Review Workspace</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Examine submitted curriculum documents, anchor revision notes by section, and issue institutional approvals.
+            Examine submitted curriculum documents under Regulation 2026, anchor revision notes by section, and issue institutional approvals.
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-amber-100 text-amber-900">
-            {pendingCount} Awaiting Review
+          <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-[#7B1113] text-white shadow-xs">
+            {pendingCount} Awaiting HoD Review
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Queue Sidebar */}
-        <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+        <div className="lg:col-span-4 bg-white border border-slate-200 border-t-4 border-t-[#7B1113] rounded-2xl p-4 shadow-xs space-y-3">
           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2">
             Department Syllabi Queue
           </div>
@@ -108,7 +108,7 @@ export const ReviewWorkspace: React.FC = () => {
                     onClick={() => setSelectedCourse(c)}
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-sky-500 bg-sky-50/60 shadow-xs'
+                        ? 'border-[#7B1113] bg-[#FAF2F3] shadow-xs border-l-4 border-l-[#7B1113]'
                         : 'border-slate-200 hover:border-slate-300 bg-white'
                     }`}
                   >

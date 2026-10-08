@@ -1,6 +1,9 @@
 import { Course, CourseValidationReport, User } from '@syllabusforge/shared';
 
-const API_BASE = '/api';
+const envUrl = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').trim();
+const API_BASE = envUrl
+  ? (envUrl.endsWith('/api') ? envUrl : `${envUrl.replace(/\/$/, '')}/api`)
+  : '/api';
 
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('syllabusforge_token');

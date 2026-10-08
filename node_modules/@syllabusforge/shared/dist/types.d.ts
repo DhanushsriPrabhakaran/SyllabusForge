@@ -1,5 +1,5 @@
 import { CategoryAbbreviation } from './constants.js';
-export type CourseType = 'THEORY' | 'PRACTICAL' | 'TCP';
+export type CourseType = 'THEORY' | 'PRACTICAL' | 'TCP' | 'AUDIT';
 export type CourseStatus = 'DRAFT' | 'SUBMITTED' | 'RETURNED' | 'APPROVED' | 'FINALIZED';
 export type UserRole = 'FACULTY' | 'HOD' | 'ADMIN';
 export interface User {

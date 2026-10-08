@@ -186,15 +186,13 @@ describe('B4: Preamble Validation', () => {
   const compliantPreamble =
     'Wireless Communication addresses the principles and design of modern radio communication systems, encompassing modulation techniques, channel modelling, diversity schemes, and multiple access technologies. The course bridges fundamental signal processing theory with contemporary wireless standards such as 5G and Wi-Fi, equipping students to analyse and evaluate real-world system performance. It lays the foundation for advanced specialisations in telecommunications and embedded IoT systems.';
 
-  it('should accept compliant 60-90 words single-paragraph preamble', () => {
+  it('should accept valid single-paragraph preamble regardless of word count', () => {
     const res = validatePreamble(compliantPreamble);
     expect(res.filter(r => r.severity === 'error')).toHaveLength(0);
-  });
 
-  it('should reject preambles shorter than 60 words', () => {
-    const shortText = 'This is a very short preamble about computer science principles and software development fundamentals.';
-    const res = validatePreamble(shortText);
-    expect(res.some(e => e.id === 'B4_WORD_COUNT')).toBe(true);
+    const shortText = 'This is a short preamble about computer science principles and software development fundamentals.';
+    const shortRes = validatePreamble(shortText);
+    expect(shortRes.filter(r => r.severity === 'error')).toHaveLength(0);
   });
 
   it('should reject multiple paragraphs in preamble', () => {

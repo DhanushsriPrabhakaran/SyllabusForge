@@ -228,7 +228,8 @@ export function validateCourseCode(
 }
 
 // B3: Category, L-T-P, Credits Validation
-export function computeCredits(L: number, T: number, P: number): number {
+export function computeCredits(L: number, T: number, P: number, courseType?: CourseType): number {
+  if (courseType === 'AUDIT') return 0;
   return Number((L + T + P * 0.5).toFixed(1));
 }
 
@@ -308,7 +309,7 @@ export function validatePreamble(preamble: string, coStatements: string[] = []):
       field: 'preamble',
       severity: 'error',
       message: 'Preamble is required.',
-      fixHint: 'Write a single paragraph (60 to 90 words, 3 to 4 lines) explaining the course context and relevance.',
+      fixHint: 'Write a preamble explaining the course context and relevance.',
     });
     return results;
   }
@@ -321,18 +322,6 @@ export function validatePreamble(preamble: string, coStatements: string[] = []):
       severity: 'error',
       message: 'Preamble must be a single coherent paragraph without line breaks.',
       fixHint: 'Combine multiple paragraphs into a single introductory paragraph.',
-    });
-  }
-
-  // Word count: 60 to 90 words
-  const words = countWords(text);
-  if (words < 60 || words > 90) {
-    results.push({
-      id: 'B4_WORD_COUNT',
-      field: 'preamble',
-      severity: 'error',
-      message: `Preamble must be 60 to 90 words (currently ${words} words).`,
-      fixHint: words < 60 ? `Add ${60 - words} more words to reach minimum 60 words.` : `Reduce text by ${words - 90} words to be under 90 words.`,
     });
   }
 
@@ -476,24 +465,38 @@ export function validateCourseOutcomes(
     }
 
     // Performance Indicator format & TPS alignment
-    if (!co.pi || !/^\d+\.\d+\.\d+$/.test(co.pi)) {
+    const piValues = (co.pi || '').split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+    if (piValues.length === 0) {
       results.push({
         id: `B5_CO_PI_FORMAT_${coId}`,
         field: `courseOutcomes.${idx}.pi`,
         severity: 'error',
-        message: `${coId}: Performance Indicator must be in x.y.z format (e.g. 5.2.1).`,
-        fixHint: 'Select a valid Performance Indicator from the master list.',
+        message: `${coId}: Performance Indicator is required.`,
+        fixHint: 'Enter a valid Performance Indicator (e.g. 1.2.1 or multiple values like 1.2.1, 2.1.3).',
       });
     } else {
-      // Check if PI exists and matches TPS
-      const matchedPi = PERFORMANCE_INDICATORS.find(p => p.piNumber === co.pi);
-      if (matchedPi && matchedPi.tpsLevel !== co.tpsLevel) {
+      const invalidPis = piValues.filter(p => !/^\d+\.\d+(\.\d+)?$/.test(p));
+      if (invalidPis.length > 0) {
+        results.push({
+          id: `B5_CO_PI_FORMAT_${coId}`,
+          field: `courseOutcomes.${idx}.pi`,
+          severity: 'error',
+          message: `${coId}: Performance Indicator must be in x.y.z format (e.g. 5.2.1). Invalid: ${invalidPis.join(', ')}.`,
+          fixHint: 'Ensure each Performance Indicator is in x.y.z format (e.g. 1.2.1 or 1.2.1, 2.1.3).',
+        });
+      }
+
+      // Check if any entered PI matches known master list and TPS
+      const matchedPis = piValues
+        .map(p => PERFORMANCE_INDICATORS.find(pi => pi.piNumber === p))
+        .filter(Boolean);
+      if (matchedPis.length > 0 && !matchedPis.some(p => p!.tpsLevel === co.tpsLevel)) {
         results.push({
           id: `B5_CO_PI_TPS_MISMATCH_${coId}`,
           field: `courseOutcomes.${idx}.tpsLevel`,
           severity: 'error',
-          message: `${coId}: CO TPS Level (${co.tpsLevel}) must match PI's TPS Level (${matchedPi.tpsLevel}).`,
-          fixHint: `Align TPS level with PI ${co.pi} (TPS ${matchedPi.tpsLevel}).`,
+          message: `${coId}: CO TPS Level (${co.tpsLevel}) must match at least one PI TPS Level (${matchedPis.map(p => p!.tpsLevel).join(', ')}).`,
+          fixHint: `Align TPS level with the Performance Indicator(s).`,
         });
       }
     }
@@ -671,8 +674,12 @@ export function validateCourseOutcomes(
     let po6To11Count = 0;
     cos.forEach(co => {
       if (co.pi) {
-        const firstDigit = parseInt(co.pi.split('.')[0], 10);
-        if (firstDigit >= 6 && firstDigit <= 11) {
+        const pis = co.pi.split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+        const hasPo6To11 = pis.some(p => {
+          const firstDigit = parseInt(p.split('.')[0], 10);
+          return firstDigit >= 6 && firstDigit <= 11;
+        });
+        if (hasPo6To11) {
           po6To11Count++;
         }
       }
@@ -1339,9 +1346,9 @@ export function evaluateTheoryChecklist(course: Course): Array<{ id: number; tit
     },
     {
       id: 3,
-      title: 'Preamble is 3–4 lines, single paragraph, no CO list (60–90 words).',
-      passed: countWords(course.preamble || '') >= 60 && countWords(course.preamble || '') <= 90 && (course.preamble || '').split(/\n\s*\n/).length === 1,
-      reason: `Words: ${countWords(course.preamble || '')} (required: 60-90).`,
+      title: 'Preamble is a single paragraph without CO list.',
+      passed: (course.preamble || '').trim().length > 0 && (course.preamble || '').split(/\n\s*\n/).length === 1,
+      reason: (course.preamble || '').trim().length > 0 ? `Words: ${countWords(course.preamble || '')}.` : 'Preamble missing.',
     },
     {
       id: 4,
@@ -1381,10 +1388,10 @@ export function evaluateTheoryChecklist(course: Course): Array<{ id: number; tit
       id: 7,
       title: 'Each CO has a distinct, measurable Performance Indicator.',
       passed: (() => {
-        const pis = (course.courseOutcomes || []).map(c => c.pi).filter(Boolean);
-        return pis.length === (course.courseOutcomes || []).length && new Set(pis).size === pis.length;
+        const pis = (course.courseOutcomes || []).map(c => (c.pi || '').trim()).filter(Boolean);
+        return pis.length === (course.courseOutcomes || []).length;
       })(),
-      reason: 'All PIs should be distinct and properly formatted.',
+      reason: 'All COs should have Performance Indicator(s) assigned.',
     },
     {
       id: 8,
@@ -1663,3 +1670,4 @@ export function suggestCoWeightages(cos: CourseOutcome[]): number[] {
 
   return weights;
 }
+

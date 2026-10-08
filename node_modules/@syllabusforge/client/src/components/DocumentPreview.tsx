@@ -120,19 +120,17 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         </table>
 
         {/* Preamble */}
-        <h3 className="font-bold mt-4 mb-2">Preamble</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Preamble</h3>
         <p className="text-justify mb-4">{course.preamble || 'No preamble entered.'}</p>
 
         {/* Prerequisite */}
-        <h3 className="font-bold mt-4 mb-2">Prerequisite</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Prerequisite</h3>
         <p className="mb-4">
-          {Array.isArray(course.prerequisites) && course.prerequisites.length > 0
-            ? course.prerequisites.map(p => `${p.courseCode} : ${p.courseName}`).join(', ')
-            : 'Nil'}
+          {typeof course.prerequisites === 'string' ? course.prerequisites : 'Nil'}
         </p>
 
         {/* Course Outcomes */}
-        <h3 className="font-bold mt-4 mb-2">Course Outcomes</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Course Outcomes</h3>
         <p className="mb-2 italic text-xs">On the successful completion of the course, students will be able to:</p>
         <table className="mb-4">
           <thead>
@@ -164,7 +162,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         </table>
 
         {/* Mapping with Programme Outcomes and Programme Specific Outcomes */}
-        <h3 className="font-bold mt-4 mb-2">Mapping with Programme Outcomes and Programme Specific Outcomes</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Mapping with Programme Outcomes and Programme Specific Outcomes</h3>
         <table className="mb-2 text-center text-xs">
           <thead>
             <tr>
@@ -199,7 +197,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* Assessment Pattern: Cognitive Domain */}
         {isTheory && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">Assessment Pattern: Cognitive Domain</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Assessment Pattern: Cognitive Domain</h3>
             <table className="mb-4 text-xs">
               <thead>
                 <tr>
@@ -241,7 +239,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
             {/* Course Level Assessment Questions */}
             {course.courseAssessmentQuestions && course.courseAssessmentQuestions.length > 0 && (
               <div className="mb-4">
-                <h3 className="font-bold mt-4 mb-2">Course Level Assessment Questions</h3>
+                <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Course Level Assessment Questions</h3>
                 <div className="space-y-3 text-xs">
                   {course.courseAssessmentQuestions.map((grp, gIdx) => (
                     <div key={gIdx} className="border border-slate-200 rounded p-2.5 bg-slate-50/50">
@@ -262,7 +260,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* Concept Map */}
         {(isTheory || isTcp) && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">Concept Map</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Concept Map</h3>
             {course.conceptMapImage ? (
               <div className="my-2 p-2 border border-slate-200 rounded-lg flex justify-center bg-slate-50">
                 <img
@@ -348,7 +346,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* Syllabus Modules (Theory & TCP) */}
         {(isTheory || isTcp) && course.modules && course.modules.length > 0 && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">Syllabus</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Syllabus</h3>
             <div className="space-y-2">
               {course.modules.map((m, idx) => (
                 <div key={idx} className="text-sm">
@@ -363,7 +361,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* List of Experiments (Practical & TCP) */}
         {(isPractical || isTcp) && course.experiments && course.experiments.length > 0 && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">List of Experiments with CO Mapping</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">List of Experiments with CO Mapping</h3>
             <table>
               <thead>
                 <tr>
@@ -388,7 +386,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         )}
 
         {/* Learning Resources */}
-        <h3 className="font-bold mt-4 mb-2">Learning Resources</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Learning Resources</h3>
         <div className="mb-2">
           <strong>Text Books:</strong>
           <ol className="list-decimal pl-5 mt-1 space-y-1">
@@ -416,7 +414,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* SDG Alignment */}
         {course.sdgActivities && course.sdgActivities.length > 0 && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">SDG Alignment</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">SDG Alignment</h3>
             <ol className="list-decimal pl-5 space-y-1">
               {course.sdgActivities.map((a, idx) => (
                 <li key={idx}>
@@ -435,7 +433,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* Lecture Schedule (Theory & TCP) */}
         {(isTheory || isTcp) && (
           <div className="mb-4">
-            <h3 className="font-bold mt-4 mb-2">Course Contents and Lecture Schedule</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Course Contents and Lecture Schedule</h3>
             {course.lectureScheduleItems && course.lectureScheduleItems.length > 0 ? (
               <table className="mb-4 text-xs">
                 <thead>
@@ -500,7 +498,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         {/* Annexure 1 for Practical Courses */}
         {isPractical && course.coursePlan && course.coursePlan.length > 0 && (
           <div className="mb-4 mt-8 pt-6 border-t border-slate-300">
-            <h3 className="font-bold mt-2 mb-2">Annexure – 1: Course Plan</h3>
+            <h3 className="font-bold mt-2 mb-2 bg-gray-200 p-1">Annexure – 1: Course Plan</h3>
             <table className="mb-4">
               <thead>
                 <tr>
@@ -522,7 +520,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
               </tbody>
             </table>
 
-            <h3 className="font-bold mt-4 mb-2">Plan for Assessment (Continuous Assessment: 75 Marks)</h3>
+            <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Plan for Assessment (Continuous Assessment: 75 Marks)</h3>
             <table className="mb-4">
               <thead>
                 <tr>
@@ -551,7 +549,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({ course }) => {
         )}
 
         {/* Course Designers */}
-        <h3 className="font-bold mt-4 mb-2">Course Designer(s):</h3>
+        <h3 className="font-bold mt-4 mb-2 bg-gray-200 p-1">Course Designer(s):</h3>
         <table>
           <thead>
             <tr>

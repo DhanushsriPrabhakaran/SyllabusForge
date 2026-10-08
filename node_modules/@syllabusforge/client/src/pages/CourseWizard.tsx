@@ -50,7 +50,7 @@ import {
   RefreshCw,
   Copy,
   Upload,
-  Image as ImageIcon,
+  Image as ImageIcon, ChevronRight, ChevronLeft, Menu,
 } from 'lucide-react';
 
 export const CourseWizard: React.FC = () => {
@@ -67,6 +67,7 @@ export const CourseWizard: React.FC = () => {
   // State
   const [activeTab, setActiveTab] = useState<'wizard' | 'preview'>('wizard');
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
@@ -239,7 +240,7 @@ export const CourseWizard: React.FC = () => {
 
       // Recalculate credits
       if (['L', 'T', 'P'].includes(field)) {
-        updated.credits = computeCredits(Number(updated.L) || 0, Number(updated.T) || 0, Number(updated.P) || 0);
+        updated.credits = computeCredits(Number(updated.L) || 0, Number(updated.T) || 0, Number(updated.P) || 0, updated.courseType);
       }
 
       return updated;
@@ -250,7 +251,7 @@ export const CourseWizard: React.FC = () => {
   const steps = [
     { id: 'identity', title: '1. Course Code & Identity', desc: 'Code RR AA C U V & Title' },
     { id: 'structure', title: '2. Structure & L-T-P', desc: 'Hours, credits, semester' },
-    { id: 'preamble', title: '3. Preamble & Context', desc: '60–90 words paragraph' },
+    { id: 'preamble', title: '3. Preamble & Context', desc: 'Course context & relevance' },
     { id: 'cos', title: '4. Course Outcomes', desc: 'TPS taxonomy & weightages' },
     { id: 'assessment', title: '5. Assessment Pattern', desc: 'Continuous & Terminal exam' },
     {
@@ -325,7 +326,7 @@ export const CourseWizard: React.FC = () => {
             <button
               onClick={() => setActiveTab('wizard')}
               className={`px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all ${
-                activeTab === 'wizard' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                activeTab === 'wizard' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -334,7 +335,7 @@ export const CourseWizard: React.FC = () => {
             <button
               onClick={() => setActiveTab('preview')}
               className={`px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all ${
-                activeTab === 'preview' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                activeTab === 'preview' ? 'bg-[#7B1113] text-white shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Eye className="w-3.5 h-3.5" />
@@ -345,16 +346,16 @@ export const CourseWizard: React.FC = () => {
           <button
             onClick={handleSaveDraft}
             disabled={isSaving}
-            className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs flex items-center space-x-1.5"
+            className="px-3.5 py-1.5 rounded-lg border border-[#C59B27]/40 bg-white hover:bg-[#FAF7F2] text-[#7B1113] text-xs font-bold shadow-xs flex items-center space-x-1.5 transition-colors"
           >
-            <Save className="w-3.5 h-3.5" />
+            <Save className="w-3.5 h-3.5 text-[#C59B27]" />
             <span>Save Draft</span>
           </button>
 
           {(course.status === 'APPROVED' || course.status === 'FINALIZED') && (
             <button
               onClick={handleRevise}
-              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs flex items-center space-x-1.5"
+              className="px-3 py-1.5 rounded-lg bg-[#0F2942] hover:bg-[#091A2A] text-[#E2BF53] text-xs font-semibold shadow-xs flex items-center space-x-1.5"
             >
               <Copy className="w-3.5 h-3.5" />
               <span>Clone Revision (v{course.version + 1})</span>
@@ -383,43 +384,63 @@ export const CourseWizard: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* Left Stepper List */}
-            <div className="w-64 flex-shrink-0 hidden md:block">
-              <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-xs sticky top-36">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider px-3 py-2">
-                  Syllabus Sections
+            {/* Left Stepper List (Collapsible Slider) */}
+            <div className={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} w-72 bg-white shadow-2xl border-r border-slate-200 flex flex-col`}>
+              <div className="p-4 border-b border-[#C59B27]/40 bg-[#7B1113] text-white flex items-center justify-between sticky top-0 z-10">
+                <div>
+                  <span className="text-xs font-black uppercase tracking-wider text-[#E2BF53] block font-tce">
+                    TCE SYLLABUS SECTIONS
+                  </span>
+                  <span className="text-[10px] text-white/80">Regulation 2026 Navigation</span>
                 </div>
-                <div className="space-y-1">
-                  {steps.map((st, idx) => (
-                    <button
-                      key={st.id}
-                      onClick={() => setCurrentStep(idx)}
-                      className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
-                        currentStep === idx
-                          ? 'bg-sky-50 text-sky-700 font-bold border border-sky-200'
-                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                      }`}
-                    >
-                      <div>
-                        <div>{st.title}</div>
-                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">{st.desc}</div>
-                      </div>
-                      {/* Status indicator */}
-                      <div className="ml-2 flex-shrink-0">
-                        {idx < currentStep ? (
-                          <CheckCircle className="w-4 h-4 text-emerald-500" />
-                        ) : (
-                          <div className="w-2 h-2 rounded-full bg-slate-300" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
+                <button onClick={() => setIsSidebarOpen(false)} className="p-1 rounded-md hover:bg-white/10 text-white/80 hover:text-white transition-colors">
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-3 space-y-1">
+                {steps.map((st, idx) => (
+                  <button
+                    key={st.id}
+                    onClick={() => {
+                      setCurrentStep(idx);
+                      if (window.innerWidth < 768) setIsSidebarOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-3 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
+                      currentStep === idx
+                        ? 'bg-[#FAF2F3] text-[#7B1113] font-bold border-l-4 border-[#7B1113] shadow-xs'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                  >
+                    <div>
+                      <div>{st.title}</div>
+                      <div className="text-[10px] text-slate-400 font-normal mt-1">{st.desc}</div>
+                    </div>
+                    {/* Status indicator */}
+                    <div className="ml-2 flex-shrink-0">
+                      {idx < currentStep ? (
+                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      ) : (
+                        <div className="w-2 h-2 rounded-full bg-slate-300" />
+                      )}
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
 
+            {/* Floating button to open slider when closed */}
+            {!isSidebarOpen && (
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="fixed left-0 top-1/2 -translate-y-1/2 z-30 bg-[#7B1113] hover:bg-[#560B0D] text-white p-2.5 rounded-r-xl shadow-lg border-y border-r border-[#C59B27] transition-colors"
+                title="Open Syllabus Sections"
+              >
+                <Menu className="w-5 h-5 text-[#E2BF53]" />
+              </button>
+            )}
+
             {/* Center Wizard Form Container */}
-            <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col justify-between">
+            <div className="flex-1 bg-white border border-slate-200 border-t-4 border-t-[#7B1113] rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col justify-between ml-12 lg:ml-0">
               <div>
                 {/* Step 1: Course Identity */}
                 {currentStep === 0 && (
@@ -530,9 +551,9 @@ export const CourseWizard: React.FC = () => {
                         </label>
                         <input
                           type="number"
-                          readOnly
                           value={course.version}
-                          className="w-full px-3 py-2 border border-slate-200 bg-slate-100 rounded-lg text-sm text-slate-600"
+                          onChange={(e) => updateField('version', e.target.value === '' ? '' : parseInt(e.target.value))}
+                          className="w-full px-3 py-2 border border-slate-300 bg-white rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-sky-500"
                         />
                         <span className="text-[11px] text-slate-500 mt-0.5 block">
                           Starts at 0 (digit zero). Incremented on course revision.
@@ -589,72 +610,6 @@ export const CourseWizard: React.FC = () => {
                       <span className="text-[11px] text-slate-500 mt-0.5 block">
                         HSMC, BSC, ESC, PCC, PEC, OEC, EEC, AC. Auto-suggested from category letter.
                       </span>
-                    </div>
-
-                    {/* Institutional Header Box Preview */}
-                    <div className="pt-4 border-t border-slate-200">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-slate-700">
-                          Institutional Header Box Layout (MCA / University Format):
-                        </span>
-                        <span className="text-[11px] text-sky-700 font-semibold bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                          2-Row Aligned Format
-                        </span>
-                      </div>
-                      <div className="overflow-x-auto border border-slate-300 rounded-lg shadow-xs">
-                        <table className="w-full text-xs border-collapse">
-                          <tbody>
-                            <tr>
-                              <td
-                                rowSpan={2}
-                                className="w-[18%] font-bold text-slate-900 bg-slate-100 text-center align-middle border border-slate-300 p-2 font-mono"
-                              >
-                                {course.courseCode}
-                              </td>
-                              <td
-                                rowSpan={2}
-                                className="w-[42%] font-bold text-slate-900 bg-slate-100 uppercase tracking-wide align-middle border border-slate-300 p-2"
-                              >
-                                {course.courseName || 'COURSE TITLE'}
-                              </td>
-                              <th className="w-[14%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                CATEGORY
-                              </th>
-                              <th className="w-[6.5%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                L
-                              </th>
-                              <th className="w-[6.5%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                T
-                              </th>
-                              <th className="w-[6.5%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                P
-                              </th>
-                              <th className="w-[6.5%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                CREDIT
-                              </th>
-                              {course.courseType === 'TCP' && (
-                                <th className="w-[10%] text-center font-bold text-slate-700 bg-slate-50 border border-slate-300 p-1.5 text-[11px]">
-                                  TE TYPE
-                                </th>
-                              )}
-                            </tr>
-                            <tr>
-                              <td className="text-center font-medium border border-slate-300 p-1.5 text-[11px] bg-white">
-                                {course.categoryAbbr || 'PCC'}
-                              </td>
-                              <td className="text-center border border-slate-300 p-1.5 text-[11px] bg-white">{course.L}</td>
-                              <td className="text-center border border-slate-300 p-1.5 text-[11px] bg-white">{course.T}</td>
-                              <td className="text-center border border-slate-300 p-1.5 text-[11px] bg-white">{course.P}</td>
-                              <td className="text-center font-bold border border-slate-300 p-1.5 text-[11px] bg-white">{course.credits}</td>
-                              {course.courseType === 'TCP' && (
-                                <td className="text-center font-bold border border-slate-300 p-1.5 text-[11px] bg-white">
-                                  {course.teExamType || 'TCP-T'}
-                                </td>
-                              )}
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -774,7 +729,7 @@ export const CourseWizard: React.FC = () => {
                     <div>
                       <h2 className="text-xl font-bold text-slate-900">3. Course Preamble</h2>
                       <p className="text-sm text-slate-500 mt-1">
-                        Must be a single paragraph of 3 to 4 lines (<strong>60 to 90 words</strong>). Contextualizes domain, academic relevance, and industrial significance.
+                        Contextualizes domain, academic relevance, and industrial significance.
                       </p>
                     </div>
 
@@ -783,14 +738,8 @@ export const CourseWizard: React.FC = () => {
                         <label className="text-xs font-bold text-slate-700">
                           Preamble Statement <span className="text-rose-500">*</span>
                         </label>
-                        <span
-                          className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                            countWords(course.preamble || '') >= 60 && countWords(course.preamble || '') <= 90
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-amber-100 text-amber-800'
-                          }`}
-                        >
-                          {countWords(course.preamble || '')} / 60–90 words
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                          {countWords(course.preamble || '')} words
                         </span>
                       </div>
                       <textarea
@@ -936,10 +885,12 @@ export const CourseWizard: React.FC = () => {
                                 }}
                                 className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white"
                               >
-                                <option value={2}>TPS 2 (Understand)</option>
-                                <option value={3}>TPS 3 (Apply)</option>
-                                <option value={4}>TPS 4 (Analyze)</option>
-                                <option value={5}>TPS 5 (Evaluate)</option>
+                                <option value={1}>TPS 1 (Remember)</option>
+<option value={2}>TPS 2 (Understand)</option>
+<option value={3}>TPS 3 (Apply)</option>
+<option value={4}>TPS 4 (Analyze)</option>
+<option value={5}>TPS 5 (Evaluate)</option>
+<option value={6}>TPS 6 (Create)</option>
                               </select>
                             </div>
 
@@ -947,27 +898,31 @@ export const CourseWizard: React.FC = () => {
                               <label className="block text-[11px] font-bold text-slate-600 mb-1">
                                 PI (x.y.z)
                               </label>
-                              <select
-                                value={co.pi}
+                              <input
+                                type="text"
+                                list={`pi-suggestions-${idx}`}
+                                value={co.pi || ''}
                                 onChange={e => {
                                   const piVal = e.target.value;
-                                  const matchedPi = PERFORMANCE_INDICATORS.find(p => p.piNumber === piVal);
                                   const updated = [...(course.courseOutcomes || [])];
+                                  const matchedPi = PERFORMANCE_INDICATORS.find(p => p.piNumber === piVal.trim());
                                   updated[idx] = {
                                     ...updated[idx],
                                     pi: piVal,
-                                    tpsLevel: matchedPi ? matchedPi.tpsLevel : updated[idx].tpsLevel,
+                                    ...(matchedPi ? { tpsLevel: matchedPi.tpsLevel } : {}),
                                   };
                                   updateField('courseOutcomes', updated);
                                 }}
-                                className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white"
-                              >
+                                placeholder="e.g. 1.2.1 or 1.2.1, 2.1.3"
+                                className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white focus:ring-2 focus:ring-sky-500"
+                              />
+                              <datalist id={`pi-suggestions-${idx}`}>
                                 {PERFORMANCE_INDICATORS.map(p => (
                                   <option key={p.piNumber} value={p.piNumber}>
                                     {p.piNumber} (TPS {p.tpsLevel})
                                   </option>
                                 ))}
-                              </select>
+                              </datalist>
                             </div>
                           </div>
 
@@ -2678,3 +2633,10 @@ export const CourseWizard: React.FC = () => {
     </div>
   );
 };
+
+
+
+
+
+
+

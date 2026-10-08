@@ -48,7 +48,7 @@ router.get('/:collection', async (req, res): Promise<void> => {
 router.post('/:collection', authenticate, requireRole(['ADMIN']), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { collection } = req.params;
-    const model = MODEL_MAP[collection];
+    const model = MODEL_MAP[collection as string];
     if (!model) {
       res.status(404).json({ error: `Master collection "${collection}" not found.` });
       return;
@@ -65,7 +65,7 @@ router.post('/:collection', authenticate, requireRole(['ADMIN']), async (req: Au
 router.put('/:collection/:id', authenticate, requireRole(['ADMIN']), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { collection, id } = req.params;
-    const model = MODEL_MAP[collection];
+    const model = MODEL_MAP[collection as string];
     if (!model) {
       res.status(404).json({ error: `Master collection "${collection}" not found.` });
       return;
@@ -85,7 +85,7 @@ router.put('/:collection/:id', authenticate, requireRole(['ADMIN']), async (req:
 router.delete('/:collection/:id', authenticate, requireRole(['ADMIN']), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { collection, id } = req.params;
-    const model = MODEL_MAP[collection];
+    const model = MODEL_MAP[collection as string];
     if (!model) {
       res.status(404).json({ error: `Master collection "${collection}" not found.` });
       return;

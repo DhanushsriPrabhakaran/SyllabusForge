@@ -4,15 +4,15 @@ import { Course as ICourseType } from '@syllabusforge/shared';
 export interface ICourseDocument extends Omit<ICourseType, '_id' | 'id'>, Document {}
 
 const PrerequisiteSchema = new Schema({
-  courseCode: { type: String, required: true },
-  courseName: { type: String, required: true },
+  courseCode: { type: String, required: false },
+  courseName: { type: String, required: false },
 }, { _id: false });
 
 const CourseOutcomeSchema = new Schema({
-  coNo: { type: String, required: true },
-  statement: { type: String, required: true },
-  tpsLevel: { type: Number, required: true },
-  pi: { type: String, required: true },
+  coNo: { type: String, required: false },
+  statement: { type: String, required: false },
+  tpsLevel: { type: Number, required: false },
+  pi: { type: String, required: false },
   weightage: { type: Number },
   objectiveNo: { type: Number },
   objectiveName: { type: String },
@@ -27,7 +27,7 @@ const CourseOutcomeSchema = new Schema({
 }, { _id: false });
 
 const AssessmentMatrixCellSchema = new Schema({
-  coNo: { type: String, required: true },
+  coNo: { type: String, required: false },
   cat1: { type: Number, default: 0 },
   assignment1: { type: Number, default: 0 },
   cat2: { type: Number, default: 0 },
@@ -41,71 +41,71 @@ const AssessmentMatrixCellSchema = new Schema({
 }, { _id: false });
 
 const SyllabusModuleSchema = new Schema({
-  moduleNo: { type: Number, required: true },
-  mainTopic: { type: String, required: true },
+  moduleNo: { type: Number, required: false },
+  mainTopic: { type: String, required: false },
   subtopics: [{ type: String }],
   periods: { type: Number, default: 0 },
   coMapping: [{ type: String }],
 }, { _id: false });
 
 const LearningResourceSchema = new Schema({
-  type: { type: String, enum: ['TEXT', 'REFERENCE', 'WEB'], required: true },
-  authors: { type: String, required: true },
-  title: { type: String, required: true },
+  type: { type: String, enum: ['TEXT', 'REFERENCE', 'WEB'], required: false },
+  authors: { type: String, required: false },
+  title: { type: String, required: false },
   publisher: { type: String },
   edition: { type: String },
-  year: { type: Schema.Types.Mixed, required: true },
+  year: { type: Schema.Types.Mixed, required: false },
   chapters: { type: String },
   url: { type: String },
   caseStudy: { type: String },
 }, { _id: false });
 
 const SdgActivitySchema = new Schema({
-  sdgNo: { type: Number, required: true },
-  activity: { type: String, required: true },
+  sdgNo: { type: Number, required: false },
+  activity: { type: String, required: false },
   linkedModuleNo: { type: Number },
-  deliverable: { type: String, required: true },
+  deliverable: { type: String, required: false },
 }, { _id: false });
 
 const LabExperimentSchema = new Schema({
-  slNo: { type: Number, required: true },
-  name: { type: String, required: true },
-  level: { type: Number, enum: [1, 2, 3], required: true },
+  slNo: { type: Number, required: false },
+  name: { type: String, required: false },
+  level: { type: Number, enum: [1, 2, 3], required: false },
   objectiveNos: [{ type: Number }],
   coNos: [{ type: String }],
 }, { _id: false });
 
 const LabCoursePlanItemSchema = new Schema({
-  experimentNo: { type: Number, required: true },
-  name: { type: String, required: true },
+  experimentNo: { type: Number, required: false },
+  name: { type: String, required: false },
   preLabActivity: { type: String },
   inLabActivity: { type: String },
   postLabActivity: { type: String },
-  level: { type: Number, enum: [1, 2, 3], required: true },
+  level: { type: Number, enum: [1, 2, 3], required: false },
   preMarks: { type: Number, default: 20 },
   inMarks: { type: Number, default: 35 },
   postMarks: { type: Number, default: 20 },
 }, { _id: false });
 
 const CourseDesignerSchema = new Schema({
-  name: { type: String, required: true },
-  designation: { type: String, required: true },
-  department: { type: String, required: true },
-  email: { type: String, required: true },
+  name: { type: String, required: false },
+  designation: { type: String, required: false },
+  department: { type: String, required: false },
+  email: { type: String, required: false },
 }, { _id: false });
 
 const ReviewCommentSchema = new Schema({
-  userId: { type: String, required: true },
-  userName: { type: String, required: true },
-  userRole: { type: String, required: true },
-  section: { type: String, required: true },
-  comment: { type: String, required: true },
+  userId: { type: String, required: false },
+  userName: { type: String, required: false },
+  userRole: { type: String, required: false },
+  section: { type: String, required: false },
+  comment: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
   resolved: { type: Boolean, default: false },
 });
 
 const PoPsoMappingSchema = new Schema({
-  coNo: { type: String, required: true },
+  coNo: { type: String, required: false },
   po1: { type: String, default: '' },
   po2: { type: String, default: '' },
   po3: { type: String, default: '' },
@@ -124,7 +124,7 @@ const PoPsoMappingSchema = new Schema({
 }, { _id: false });
 
 const CognitiveAssessmentRowSchema = new Schema({
-  level: { type: String, required: true },
+  level: { type: String, required: false },
   cat1: { type: Number, default: 0 },
   cat2: { type: Number, default: 0 },
   cat3: { type: Number, default: 0 },
@@ -132,42 +132,42 @@ const CognitiveAssessmentRowSchema = new Schema({
 }, { _id: false });
 
 const CourseOutcomeQuestionsSchema = new Schema({
-  coNo: { type: String, required: true },
+  coNo: { type: String, required: false },
   questions: [{ type: String }],
 }, { _id: false });
 
 const LectureScheduleItemSchema = new Schema({
-  moduleNo: { type: String, required: true },
-  topic: { type: String, required: true },
+  moduleNo: { type: String, required: false },
+  topic: { type: String, required: false },
   periods: { type: Number, default: 0 },
 }, { _id: false });
 
 const CourseHistorySchema = new Schema({
-  version: { type: Number, required: true },
-  updatedBy: { type: String, required: true },
+  version: { type: Number, required: false },
+  updatedBy: { type: String, required: false },
   updatedAt: { type: Date, default: Date.now },
-  changesSummary: { type: String, required: true },
+  changesSummary: { type: String, required: false },
 }, { _id: false });
 
 const CourseSchema = new Schema<ICourseDocument>(
   {
-    courseType: { type: String, enum: ['THEORY', 'PRACTICAL', 'TCP'], required: true },
+    courseType: { type: String, enum: ['THEORY', 'PRACTICAL', 'TCP', 'AUDIT'], required: false },
     regulationYear: { type: Number, default: 2026 },
     regulationCode: { type: String, default: '26' },
-    programmeCode: { type: String, required: true, uppercase: true },
-    categoryLetter: { type: String, required: true, uppercase: true },
-    uniqueLetter: { type: String, required: true, uppercase: true },
+    programmeCode: { type: String, required: false, uppercase: true },
+    categoryLetter: { type: String, required: false, uppercase: true },
+    uniqueLetter: { type: String, required: false, uppercase: true },
     version: { type: Number, default: 0 },
-    courseCode: { type: String, required: true },
-    courseName: { type: String, required: true },
-    categoryAbbr: { type: String, required: true },
-    semester: { type: Number, required: true },
-    L: { type: Number, required: true, default: 0 },
-    T: { type: Number, required: true, default: 0 },
-    P: { type: Number, required: true, default: 0 },
-    credits: { type: Number, required: true },
+    courseCode: { type: String, required: false },
+    courseName: { type: String, required: false },
+    categoryAbbr: { type: String, required: false },
+    semester: { type: Number, required: false },
+    L: { type: Number, required: false, default: 0 },
+    T: { type: Number, required: false, default: 0 },
+    P: { type: Number, required: false, default: 0 },
+    credits: { type: Number, required: false },
     teExamType: { type: String, enum: ['TCP-T', 'TCP-P'] },
-    preamble: { type: String, required: true },
+    preamble: { type: String, required: false },
     isAdvanced: { type: Boolean, default: false },
     prerequisites: { type: Schema.Types.Mixed, default: 'Nil' },
     courseOutcomes: [CourseOutcomeSchema],
@@ -190,8 +190,8 @@ const CourseSchema = new Schema<ICourseDocument>(
       enum: ['DRAFT', 'SUBMITTED', 'RETURNED', 'APPROVED', 'FINALIZED'],
       default: 'DRAFT',
     },
-    createdBy: { type: String, required: true },
-    department: { type: String, required: true },
+    createdBy: { type: String, required: false },
+    department: { type: String, required: false },
     comments: [ReviewCommentSchema],
     revisionOf: { type: Schema.Types.ObjectId, ref: 'Course' },
     history: [CourseHistorySchema],
@@ -203,3 +203,4 @@ const CourseSchema = new Schema<ICourseDocument>(
 CourseSchema.index({ regulationCode: 1, programmeCode: 1, courseCode: 1, version: 1 }, { unique: true });
 
 export const Course = mongoose.model<ICourseDocument>('Course', CourseSchema);
+
